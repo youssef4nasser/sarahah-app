@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import Logo from "../../public/logo.png";
 
-export default function VerifyEmail() {
+export default function ConfirmVerified() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center w-full px-4 max-w-md mx-auto py-8">
       <div className="bg-white p-8 rounded-lg shadow-md w-full">
