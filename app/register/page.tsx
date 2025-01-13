@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { AUTH_URLS } from '../_constants/END_POINTS'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 type Inputs = {
   name: string
@@ -17,7 +18,8 @@ type Inputs = {
 }
 
 export default function Register() {
-  
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -28,7 +30,8 @@ export default function Register() {
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
       const res = await axios.post(`${AUTH_URLS.signup}`, data)
-      console.log(res.data);
+      toast.success(res.data.message + ' please check your email');
+      router.push('/login');
     } catch (error) {      
       if (axios.isAxiosError(error) && error.response) {
         toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));

@@ -18,7 +18,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
       <body className={inter.className + ' min-h-screen flex flex-col items-center justify-between'}>
       <Navbar />
         {children}
-        <Toaster position="bottom-center" toastOptions={{ duration: 3000 }} />
+        <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <Footer />
       </body>
     </html>
