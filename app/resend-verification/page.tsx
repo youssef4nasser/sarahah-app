@@ -1,3 +1,4 @@
+'use client';
 import Image from "next/image";
 // import Link from "next/link";
 import {
@@ -6,8 +7,39 @@ import {
   // FaExclamationTriangle,
 } from "react-icons/fa";
 import Logo from '../../public/logo.png'
+import { SubmitHandler, useForm } from "react-hook-form";
+import axios from "axios";
+import { AUTH_URLS } from "../_constants/END_POINTS";
+
+type Inputs = {
+  email: string
+}
 
 export default function ResendVerification() {
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>()
+
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    console.log(data);
+    
+    try {
+      const res = await axios.post(`${AUTH_URLS.resendVerification}`, data)
+      console.log(res);
+      // toast.success(res.data.message + ' please check your email');
+      // router.push('/login');
+    } catch (error) {      
+      if (axios.isAxiosError(error) && error.response) {
+        console.log(error);
+        // toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));
+      } else {
+        // toast.error('An unexpected error occurred');
+      }
+    }
+  };
   
   return (
     <main className="flex-1 flex flex-col items-center justify-center w-full px-4 max-w-md mx-auto py-8">
@@ -25,7 +57,7 @@ export default function ResendVerification() {
           </h1>
         </div>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label
                 htmlFor="email"
@@ -35,16 +67,18 @@ export default function ResendVerification() {
               </label>
               <div className="relative">
                 <input
+                  {...register('email', { required: 'Email is required' })}
                   type="email"
                   id="email"
                   name="email"
-                  value={''}
-                  required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:border-[#00bfb3] pl-10"
                   placeholder="Enter your email address"
                 />
                 <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
+              {errors.email && (
+                <span className="text-red-500 text-sm">{errors.email.message}</span>
+              )}
             </div>
             <button
               type="submit"
