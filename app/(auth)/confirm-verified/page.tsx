@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
-import Logo from "../../public/logo.png";
+import Logo from "../../../public/logo.png";
 
 export default function ConfirmVerified() {
   return (

@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import Logo from '../../public/logo.png'
+import Logo from '../../../public/logo.png'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AUTH_URLS } from '../../_constants/END_POINTS'
 import toast from 'react-hot-toast'
