@@ -9,7 +9,7 @@ import {
 import Logo from '../../public/logo.png'
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { AUTH_URLS } from "../_constants/END_POINTS";
+import { AUTH_URLS } from "../../_constants/END_POINTS";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
