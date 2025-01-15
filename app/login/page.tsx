@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "../../public/logo.png";
 import { SubmitHandler, useForm } from "react-hook-form";
+import axios from "axios";
+import { AUTH_URLS } from "../_constants/END_POINTS";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type Inputs = {
   email: string;
@@ -10,14 +14,27 @@ type Inputs = {
 };
 
 export default function Login() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>()
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    try {
+      const res = await axios.post(`${AUTH_URLS.login}`, data)
+      router.push('/messages');
+      toast.success("Login Successfull");
+      localStorage.setItem('token', res.data.token);
+    } catch (error) {      
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));
+      } else {
+        toast.error('An unexpected error occurred');
+      }
+    }
   };
 
   return (
