@@ -88,26 +88,27 @@ export default function ResendVerification() {
              Resend Verification Email
             </button>
             </form>
-          )}
-          {submitStatus === 'success' && (
-            <div className="flex flex-col items-center">
-              <FaCheckCircle className="text-green-500 text-5xl mb-4" />
-              <h2 className="text-xl font-semibold mb-2">
-                Verification Email Sent!
-              </h2>
-              <p className="text-gray-600 text-center mb-6">
-                A new verification email has been sent to your email address.
-                Please check your inbox and follow the instructions to verify your
-                account.
-              </p>
-              <Link
-                href="/"
-                className="bg-[#00bfb3] text-white py-2 px-6 rounded-md hover:bg-[#00a89d] focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:ring-offset-2 transition-colors"
-              >
-                Return to Home
-              </Link>
-            </div>
-          )}
+        )}
+
+        {submitStatus === 'success' && (
+          <div className="flex flex-col items-center">
+            <FaCheckCircle className="text-green-500 text-5xl mb-4" />
+            <h2 className="text-xl font-semibold mb-2">
+              Verification Email Sent!
+            </h2>
+            <p className="text-gray-600 text-center mb-6">
+              A new verification email has been sent to your email address.
+              Please check your inbox and follow the instructions to verify your
+              account.
+            </p>
+            <Link
+              href="/"
+              className="bg-[#00bfb3] text-white py-2 px-6 rounded-md hover:bg-[#00a89d] focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:ring-offset-2 transition-colors"
+            >
+              Return to Home
+            </Link>
+          </div>
+        )}
 
         {submitStatus === 'error' && (
           <div className="flex flex-col items-center">
@@ -118,6 +119,7 @@ export default function ResendVerification() {
               later or contact support if the problem persists.
             </p>
             <button
+              onClick={() => setSubmitStatus('idle')}
               className="bg-[#00bfb3] text-white py-2 px-6 rounded-md hover:bg-[#00a89d] focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:ring-offset-2 transition-colors"
             >
               Try Again
