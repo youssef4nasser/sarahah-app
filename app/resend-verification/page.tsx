@@ -1,21 +1,24 @@
 'use client';
 import Image from "next/image";
-// import Link from "next/link";
+import Link from "next/link";
 import {
   FaEnvelope,
-  // FaCheckCircle,
-  // FaExclamationTriangle,
+  FaCheckCircle,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import Logo from '../../public/logo.png'
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { AUTH_URLS } from "../_constants/END_POINTS";
+import toast from "react-hot-toast";
+import { useState } from "react";
 
 type Inputs = {
   email: string
 }
 
 export default function ResendVerification() {
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   const {
     register,
@@ -23,20 +26,17 @@ export default function ResendVerification() {
     formState: { errors },
   } = useForm<Inputs>()
 
-  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    console.log(data);
-    
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {    
     try {
       const res = await axios.post(`${AUTH_URLS.resendVerification}`, data)
-      console.log(res);
-      // toast.success(res.data.message + ' please check your email');
-      // router.push('/login');
+      toast.success(res.data.message);
+      setSubmitStatus('success')
     } catch (error) {      
       if (axios.isAxiosError(error) && error.response) {
-        console.log(error);
-        // toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));
+        setSubmitStatus('error')
+        toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));
       } else {
-        // toast.error('An unexpected error occurred');
+        toast.error('An unexpected error occurred');
       }
     }
   };
@@ -57,7 +57,8 @@ export default function ResendVerification() {
           </h1>
         </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {submitStatus === 'idle' && (
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label
                 htmlFor="email"
@@ -86,26 +87,29 @@ export default function ResendVerification() {
             >
              Resend Verification Email
             </button>
-          </form>
-       
-          {/* <div className="flex flex-col items-center">
-            <FaCheckCircle className="text-green-500 text-5xl mb-4" />
-            <h2 className="text-xl font-semibold mb-2">
-              Verification Email Sent!
-            </h2>
-            <p className="text-gray-600 text-center mb-6">
-              A new verification email has been sent to your email address.
-              Please check your inbox and follow the instructions to verify your
-              account.
-            </p>
-            <Link
-              href="/"
-              className="bg-[#00bfb3] text-white py-2 px-6 rounded-md hover:bg-[#00a89d] focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:ring-offset-2 transition-colors"
-            >
-              Return to Home
-            </Link>
-          </div>
-     
+            </form>
+          )}
+          {submitStatus === 'success' && (
+            <div className="flex flex-col items-center">
+              <FaCheckCircle className="text-green-500 text-5xl mb-4" />
+              <h2 className="text-xl font-semibold mb-2">
+                Verification Email Sent!
+              </h2>
+              <p className="text-gray-600 text-center mb-6">
+                A new verification email has been sent to your email address.
+                Please check your inbox and follow the instructions to verify your
+                account.
+              </p>
+              <Link
+                href="/"
+                className="bg-[#00bfb3] text-white py-2 px-6 rounded-md hover:bg-[#00a89d] focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:ring-offset-2 transition-colors"
+              >
+                Return to Home
+              </Link>
+            </div>
+          )}
+
+        {submitStatus === 'error' && (
           <div className="flex flex-col items-center">
             <FaExclamationTriangle className="text-red-500 text-5xl mb-4" />
             <h2 className="text-xl font-semibold mb-2">Error</h2>
@@ -118,7 +122,8 @@ export default function ResendVerification() {
             >
               Try Again
             </button>
-          </div> */}
+          </div>
+        )}
       </div>
     </main>
   );
