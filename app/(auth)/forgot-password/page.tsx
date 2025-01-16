@@ -4,9 +4,36 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaEnvelope } from 'react-icons/fa'
 import ImgforgotPass from "../../../public/forgotpassword.svg";
+import { AUTH_URLS } from '@/app/_constants/END_POINTS'
+import axios from 'axios'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+
+type Inputs = {
+    email: string;
+};
 
 export default function ForgotPassword() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>()
+
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    try {
+      const res = await axios.post(`${AUTH_URLS.forgotPassword}`, data)
+        console.log(res);
+    } catch (error) {      
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));
+      } else {
+        toast.error('An unexpected error occurred');
+      }
+    }
+  };
 
   return (
     <main className="flex-1 flex flex-col items-center justify-center w-full px-4 max-w-md mx-auto py-8">
@@ -26,22 +53,25 @@ export default function ForgotPassword() {
         </div>
 
         {submitStatus === 'idle' && (
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
             <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address
             </label>
             <div className="relative">
                 <input
+                {...register('email', { required: 'Email is required' })}
                 type="email"
                 id="email"
                 name="email"
-                value={''}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00bfb3] focus:border-[#00bfb3] pl-10"
                 placeholder="Enter your email address"
                 />
                 <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
+            {errors.email && (
+                <span className="text-red-500 text-sm">{errors.email.message}</span>
+            )}
             </div>
             <button
             type="submit"
@@ -58,7 +88,7 @@ export default function ForgotPassword() {
             Recovery instructions have been sent to your email address. Please check your inbox.
             </div>
             <Link
-            href="/login"
+            href="/.forgotPassword"
             className="text-[#00bfb3] hover:underline"
             >
             Return to Login

@@ -7,5 +7,7 @@ export const AUTH_URLS = {
     login: `${BASE_AUTHS}/Login`,
     signup: `${BASE_AUTHS}/signup`,
     resendVerification: `${BASE_AUTHS}/resend-verification`,
+    forgotPassword: `${BASE_AUTHS}/forgot-password`,
+    resetPassword: `${BASE_AUTHS}/reset-password`,
 }
 // ======================================================================
