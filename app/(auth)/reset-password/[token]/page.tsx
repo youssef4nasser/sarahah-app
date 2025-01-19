@@ -14,11 +14,8 @@ type Inputs = {
   confirmPassword: string;
 };
 
-export default function ResetPassword({
-  params,
-}: {
-  params: { token: string };
-}) {
+export default function ResetPassword({ params }: { params: { token: string } }) {
+
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
