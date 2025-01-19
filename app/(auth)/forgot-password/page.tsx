@@ -25,9 +25,11 @@ export default function ForgotPassword() {
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
       const res = await axios.post(`${AUTH_URLS.forgotPassword}`, data)
-        console.log(res);
+        setSubmitStatus(res.status === 200 ? 'success' : 'idle')
+        toast.success('Password reset link sent to your email');
     } catch (error) {      
       if (axios.isAxiosError(error) && error.response) {
+        setSubmitStatus('error')
         toast.error(String(error.response.data.errMsg || error.response.data.Error[0].message));
       } else {
         toast.error('An unexpected error occurred');
@@ -87,12 +89,6 @@ export default function ForgotPassword() {
             <div className="bg-green-50 text-green-800 p-4 rounded-md mb-4">
             Recovery instructions have been sent to your email address. Please check your inbox.
             </div>
-            <Link
-            href="/.forgotPassword"
-            className="text-[#00bfb3] hover:underline"
-            >
-            Return to Login
-            </Link>
         </div>
         )}
 
