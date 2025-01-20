@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { use, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLock } from "react-icons/fa";
@@ -14,12 +14,14 @@ type Inputs = {
   confirmPassword: string;
 };
 
-export default function ResetPassword({ params }: { params: { token: string } }) {
+type Params = Promise<{ slug: string }>
+
+export default function ResetPassword(props: {params: Params}) {
+  const params = use(props.params)
 
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
-  console.log(params);
 
   const {
     register,
@@ -32,7 +34,7 @@ export default function ResetPassword({ params }: { params: { token: string } })
     try {
       const res = await axios.post(`${AUTH_URLS.resetPassword}`, {
         ...data,
-        token: params.token,
+        token: params,
       });
       setSubmitStatus(res.status === 200 ? "success" : "idle");
       toast.success("Password reset successfully");
